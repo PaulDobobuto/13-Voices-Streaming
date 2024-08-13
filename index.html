@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproductor de Audio Estilo Deezer</title>
+    <link rel="shortcut icon" href="https://cdns-images.dzcdn.net/images/cover/91c7ab2caeb92eef4d2eb7b7076a02af/1900x1900-000000-80-0-0.jpg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Cambiado para alinear desde la parte superior */
+            height: 100vh;
+            margin: 0;
+            padding: 20px; /* Añadido padding para evitar que se pegue al borde */
+        }
+        .container {
+            text-align: center;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 1500px; /* ancho */
+            overflow: auto; /* scroll*/
+            height: 80vh; /* Altura fija, creo... */
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        audio {
+            width: 100%;
+            outline: none;
+        }
+        #playlist {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+            max-height: 500px; /* Altura máxima para la lista de reproducción */
+            overflow-y: auto; /* Permite el desplazamiento vertical */
+        }
+        #playlist li {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #282828;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #playlist li:hover {
+            background-color: #383838;
+        }
+        .active {
+            background-color: #0072ff;
+        }
+        .cover {
+            margin-bottom: 20px;
+            max-width: 100%; /* Asegura que la imagen no exceda el contenedor */
+            border-radius: 10px; /* Bordes redondeados para la imagen */
+            display: none; /* Inicialmente oculto */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>13 Voices (Side A+B) <br> <img src="https://cdns-images.dzcdn.net/images/cover/91c7ab2caeb92eef4d2eb7b7076a02af/1900x1900-000000-80-0-0.jpg" height="250" alt="">
+        <img src="https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/35/99/85/359985d1-45a3-dd32-0d2e-f9ce79944a78/907.jpg/1200x1200bb.jpg" height="250" alt=""></h1>
+        
+        <img id="coverImage" class="cover" src="" alt="Portada">
+        
+        <audio id="audioPlayer" controls>
+            <source id="audioSource" src="" type="audio/mp3">
+            Tu navegador no soporta el elemento de audio.
+        </audio>
+
+        <ul id="playlist">
+            <li data-src="13 Voices/Sum 41 - A Murder Of Crows.mp3" data-cover="13 Voices/A.jpg">A Murder Of Crows</li>
+            <li data-src="13 Voices/Sum 41 - Goddamn I m Dead Again.mp3" data-cover="13 Voices/A.jpg">Goddamn I'm Dead Again</li>
+            <li data-src="13 Voices/Sum 41 - Fake My Own Death.mp3" data-cover="13 Voices/A.jpg">Fake My Own Death</li>
+            <li data-src="13 Voices/Sum 41 - Breaking The Chain.mp3" data-cover="13 Voices/A.jpg">Breaking The Chain</li>
+            <li data-src="13 Voices/Sum 41 - There Will Be Blood.mp3" data-cover="13 Voices/A.jpg">There Will Be Blood</li>
+            <li data-src="13 Voices/Sum 41 - 13 Voices.mp3" data-cover="13 Voices/A.jpg">13 Voices</li>
+            <li data-src="13 Voices/Sum 41 - War.mp3" data-cover="13 Voices/A.jpg">War</li>
+            <li data-src="13 Voices/Sum 41 - God Save Us All (Death to POP).mp3" data-cover="13 Voices/A.jpg">God Save Us All (Death To POP)</li>
+            <li data-src="13 Voices/Sum 41 - The Fall And The Rise.mp3" data-cover="13 Voices/A.jpg">The Fall And The Rise</li>
+            <li data-src="13 Voices/Sum 41 - Twisted By Design.mp3" data-cover="13 Voices/A.jpg">Twisted By Design</li>
+            <li data-src="13 Voices/Sum 41 - Better Days.mp3" data-cover="13 Voices/B.jpg">Better Days (B Sides)</li>
+            <li data-src="13 Voices/Sum 41 - Black Eyes.mp3" data-cover="13 Voices/B.jpg">Black Eyes (B Sides)</li>
+            <li data-src="13 Voices/Sum 41 - War (Acoustic).mp3" data-cover="13 Voices/B.jpg">War (Acoustic) (B Sides)</li>
+            <li data-src="13 Voices/Sum 41 - Breaking The Chain (Acoustic).mp3" data-cover="13 Voices/B.jpg">Breaking The Chain (Acoustic) (B Sides)</li>
+            <li data-src="13 Voices/Sum 41 - Radio Radio.mp3" data-cover="13 Voices/B.jpg">Radio Radio (B Sides)</li>
+        </ul>
+    </div>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const audioSource = document.getElementById('audioSource');
+        const coverImage = document.getElementById('coverImage');
+        const playlistItems = document.querySelectorAll('#playlist li');
+
+        playlistItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Remover clase activa de todos los elementos
+                playlistItems.forEach(i => i.classList.remove('active'));
+                
+                // Agregar clase activa al elemento seleccionado
+                item.classList.add('active');
+                
+                const src = item.getAttribute('data-src');
+                const cover = item.getAttribute('data-cover');
+
+                audioSource.src = src;
+                coverImage.src = cover; // Actualiza la imagen de la portada
+                coverImage.style.display = 'block'; // Muestra la imagen
+                audioPlayer.load();
+                audioPlayer.play();
+            });
+        });
+    </script>
+</body>
+</html>
